@@ -1,0 +1,101 @@
+timestamp,location_name,latitude,longitude,temperature,humidity,air_quality_index,co2,noise_level,light_intensity,patient_id,patient_name,caregiver_name,condition,status_label,reacted,notes
+2025-10-30 23:23:40,Hadapsar,18.513009,73.92391,30.4,62.26,132.3,632.37,77.42,812.35,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:23:45,Hinjewadi,18.590575,73.743567,33.06,,119.21,605.11,67.97,745.41,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:23:50,Hadapsar,18.506957,73.921872,26.21,54.59,101.37,648.92,67.28,789.87,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:23:55,Hinjewadi,18.592312,73.737764,31.76,37.65,94.2,490.04,70.88,627.15,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:24:00,Shivajinagar,18.534369,73.847505,27.9,46.35,109.1,540.59,67.21,673.6,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:24:05,Magarpatta,18.518991,73.938413,25.65,45.0,129.34,576.17,70.83,687.44,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:24:10,Hinjewadi,18.596916,73.745907,25.58,82.58,77.63,613.65,78.56,787.06,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:24:15,Viman Nagar,18.563418,73.923817,27.21,46.72,112.09,560.49,82.22,657.18,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:24:20,Aundh,18.560549,73.804389,25.14,64.95,93.89,476.5,80.69,704.27,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:24:25,Koregaon Park,18.53332,73.881313,27.31,59.83,120.69,751.81,50.23,805.91,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:24:30,Koregaon Park,18.541186,73.903284,28.47,59.16,141.23,593.2,61.25,716.31,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:24:35,Magarpatta,18.520612,73.93778,33.13,75.36,60.9,565.35,68.6,654.64,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:24:40,Baner,18.566328,73.783572,25.97,80.21,128.17,543.47,60.28,678.58,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:24:45,Aundh,18.566965,73.818189,31.34,62.76,93.03,617.58,58.82,634.5,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:24:50,Shivajinagar,18.527642,73.857503,29.48,90.52,134.29,663.01,79.0,629.61,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,CRITICAL,False,No visible discomfort.
+2025-10-30 23:24:55,Kothrud,18.514302,73.808026,31.06,54.15,97.5,638.32,69.38,666.31,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:25:00,Koregaon Park,18.54676,73.890834,27.71,25.84,132.8,470.55,59.69,829.04,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,CRITICAL,False,No visible discomfort.
+2025-10-30 23:25:05,Baner,18.564111,73.795159,33.1,64.82,84.99,541.31,88.12,785.99,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:25:10,Hadapsar,18.501222,73.929361,24.48,57.23,113.03,524.97,68.36,787.48,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:25:15,Shivajinagar,18.519425,73.857488,24.81,54.59,133.55,582.6,84.82,628.03,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:25:20,Hadapsar,18.504585,73.937272,26.17,57.09,141.32,499.73,76.26,722.94,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:25:25,Baner,18.568977,73.796161,26.92,43.14,92.42,569.26,56.97,743.46,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:25:30,Shivajinagar,18.527779,73.852416,24.09,59.51,163.27,575.65,69.92,707.17,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:25:35,Hinjewadi,18.599519,73.734759,25.61,54.93,67.68,571.4,112.2,896.59,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,CRITICAL,False,No visible discomfort.
+2025-10-30 23:25:40,Aundh,18.570002,73.799063,29.17,38.89,117.01,521.54,67.71,778.72,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:25:45,Magarpatta,18.509407,73.931918,29.19,37.59,114.2,664.07,61.46,596.04,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:25:50,Viman Nagar,18.559828,73.90243,33.25,52.09,105.71,686.34,62.83,869.81,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:25:55,Baner,18.559714,73.791953,29.88,53.73,101.91,656.76,47.6,647.35,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:26:00,Koregaon Park,18.542866,73.893749,26.5,41.58,124.09,551.5,66.49,762.08,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:26:05,Shivajinagar,18.531292,73.84498,31.73,58.44,122.65,554.34,75.14,597.37,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:26:10,Aundh,18.56604,73.807445,33.06,88.26,129.35,474.24,68.42,781.81,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,CRITICAL,False,No visible discomfort.
+2025-10-30 23:26:15,Wakad,18.586446,73.744087,21.65,37.65,66.18,556.97,64.37,879.7,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:26:20,Koregaon Park,18.533767,73.896158,25.86,43.32,117.58,611.3,57.81,809.5,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:26:25,Wakad,18.594349,73.7598,27.5,61.23,92.98,556.05,68.65,727.72,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:26:30,Shivajinagar,18.532971,73.849226,26.39,65.18,136.01,553.35,68.2,734.54,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:26:35,Hinjewadi,18.592965,73.727489,27.95,24.23,94.17,590.32,80.12,782.89,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,CRITICAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:26:40,Kothrud,18.503629,73.798247,25.51,49.1,97.28,546.3,49.07,581.69,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:26:45,Baner,18.573095,73.793302,26.16,66.27,104.45,680.1,63.38,583.7,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:26:50,Magarpatta,18.525477,73.928763,26.91,76.99,82.05,549.33,60.54,775.58,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:26:55,Magarpatta,18.516299,73.929502,29.46,62.95,113.38,556.96,79.07,804.34,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:27:00,Shivajinagar,18.525092,73.84282,23.3,71.89,129.71,688.58,87.25,749.91,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:27:05,Shivajinagar,18.521902,73.848581,24.81,28.4,140.49,492.73,68.31,617.11,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,CRITICAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:27:10,Shivajinagar,18.536205,73.83982,27.25,20.0,106.79,579.55,83.14,549.99,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,CRITICAL,False,No visible discomfort.
+2025-10-30 23:27:15,Viman Nagar,18.564433,73.906878,22.94,67.26,71.92,679.74,68.03,706.97,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:27:20,Hinjewadi,18.580446,73.750341,28.17,74.37,92.06,563.28,70.27,775.64,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:27:25,Magarpatta,18.529654,73.936862,26.17,47.28,86.74,525.77,70.21,627.14,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:27:30,Magarpatta,18.509863,73.936388,30.49,41.62,85.53,533.54,61.32,689.84,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:27:35,Hinjewadi,18.587786,73.739191,29.55,69.91,101.55,569.07,78.62,703.63,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:27:40,Magarpatta,18.514002,73.93101,28.41,42.6,107.86,557.87,73.41,782.56,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:27:45,Aundh,18.572985,73.819494,25.26,56.86,84.74,643.0,54.71,677.55,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:27:50,Magarpatta,18.526276,73.928815,25.09,51.4,128.77,538.44,71.89,732.5,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:27:55,Hadapsar,18.502956,73.926698,25.61,60.64,96.51,516.03,61.52,798.76,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:28:00,Hinjewadi,18.582035,73.733333,26.08,59.26,118.61,612.41,47.98,702.5,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:28:05,Hinjewadi,18.586285,73.727306,27.3,81.39,96.87,613.8,89.4,703.68,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:28:10,Hadapsar,18.494679,73.917514,27.75,46.39,189.79,558.9,81.45,718.86,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:28:15,Hadapsar,18.491071,73.931105,28.93,38.27,95.9,613.22,63.12,574.95,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:28:20,Wakad,18.590281,73.744413,34.91,39.04,121.4,591.81,57.92,680.05,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:28:25,Baner,18.561529,73.78958,27.25,52.86,96.98,604.6,67.73,588.13,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:28:30,Kothrud,18.505838,73.801757,29.99,55.47,83.04,504.31,66.51,614.72,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:28:35,Baner,18.566197,73.782907,23.92,33.95,116.71,565.13,63.84,687.78,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:28:40,Aundh,18.564926,73.807792,29.17,80.18,77.71,539.27,78.16,651.86,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:28:45,Koregaon Park,18.539948,73.882994,29.8,40.21,128.73,577.92,70.22,681.96,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:28:50,Kothrud,18.504698,73.799894,24.75,61.32,134.51,532.45,61.65,894.94,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:28:55,Hinjewadi,18.587949,73.734102,27.56,28.7,101.02,610.72,53.86,788.86,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,CRITICAL,False,No visible discomfort.
+2025-10-30 23:29:00,Aundh,18.567077,73.81411,31.15,73.05,124.85,578.39,88.86,776.18,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:29:05,Viman Nagar,18.560992,73.904675,23.62,40.98,114.91,496.18,61.88,753.22,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:29:10,Koregaon Park,18.54231,73.88309,32.01,54.21,128.45,535.52,73.55,688.47,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:29:15,Hinjewadi,18.582071,73.740137,30.19,56.46,100.2,536.67,61.81,665.49,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:29:20,Shivajinagar,18.521955,73.841872,31.31,78.24,151.99,567.04,72.82,707.64,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:29:25,Koregaon Park,18.530098,73.89395,31.95,61.67,112.95,507.28,62.64,778.58,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:29:30,Viman Nagar,18.57097,73.916616,29.65,54.87,102.68,623.26,54.32,724.75,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:29:35,Hadapsar,18.50247,73.921464,30.01,58.85,121.38,481.38,52.09,610.39,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:29:40,Hadapsar,18.496247,73.929812,29.88,47.81,100.03,546.96,80.54,739.6,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:29:45,Hinjewadi,18.597124,73.742185,25.74,57.57,100.96,523.09,82.58,897.78,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:29:50,Shivajinagar,18.534497,73.854118,27.75,64.04,127.59,646.35,72.27,777.71,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:29:55,Viman Nagar,18.571507,73.925871,25.53,30.95,95.18,551.9,86.25,647.86,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:30:00,Aundh,18.568616,73.804771,28.74,44.07,143.14,543.09,57.43,697.4,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:30:05,Viman Nagar,18.560333,73.905637,28.79,35.53,67.4,625.61,58.87,695.92,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:30:10,Hinjewadi,18.595698,73.734772,25.86,51.42,108.63,551.6,69.43,814.3,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:30:15,Hinjewadi,18.579929,73.738342,23.81,49.43,76.1,518.94,81.79,912.72,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,CRITICAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:30:20,Baner,18.573457,73.783283,29.94,63.93,125.42,563.86,67.49,801.2,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:30:25,Hinjewadi,18.593483,73.747087,24.49,48.61,113.92,631.45,71.54,729.27,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:30:30,Aundh,18.553616,73.797523,29.52,46.58,102.0,578.45,79.3,643.83,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:30:35,Magarpatta,18.508302,73.93749,29.62,43.51,,601.68,78.14,758.51,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:30:40,Aundh,18.571225,73.814973,35.51,41.31,102.26,578.65,68.34,621.92,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:30:45,Wakad,18.602796,73.738734,26.13,49.04,109.1,639.84,59.79,616.48,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:30:50,Viman Nagar,18.577573,73.916611,26.62,55.39,74.93,763.56,56.54,906.31,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,CRITICAL,False,No visible discomfort.
+2025-10-30 23:30:55,Wakad,18.584254,73.740344,27.63,37.38,96.51,601.94,67.52,701.67,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:31:00,Magarpatta,18.514058,73.933763,28.22,34.93,78.76,585.46,67.83,744.19,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:31:05,Hinjewadi,18.601767,73.729231,30.16,57.14,80.78,515.62,41.37,619.4,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:31:10,Shivajinagar,18.520646,73.841182,26.08,61.24,92.07,613.84,58.53,723.9,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:31:15,Hadapsar,18.491465,73.918848,30.21,75.81,142.11,505.93,72.76,715.92,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:31:20,Hinjewadi,18.598346,73.748908,30.51,48.39,90.82,569.07,79.37,634.29,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:31:25,Hinjewadi,18.589356,73.750627,31.94,50.04,94.86,492.34,80.2,778.07,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:31:30,Hadapsar,18.507478,73.91658,25.81,59.47,110.9,530.57,74.18,746.26,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:31:35,Wakad,18.593018,73.742376,33.77,31.26,87.49,595.12,71.41,882.62,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,False,No visible discomfort.
+2025-10-30 23:31:40,Kothrud,18.49717,73.807205,23.13,54.68,118.91,591.72,63.75,713.0,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:31:45,Hadapsar,18.50348,73.928362,28.04,63.14,99.59,551.06,82.51,668.16,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,WARNING,True,Patient reacted to discomfort. Threshold may adjust.
+2025-10-30 23:31:50,Kothrud,18.509672,73.802277,26.68,55.34,99.47,503.06,57.86,745.93,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,NORMAL,False,No visible discomfort.
+2025-10-30 23:31:55,Hadapsar,18.501768,73.935188,29.9,87.72,102.79,556.25,67.95,624.1,sunita_joshi,Mrs. Sunita Joshi,Arti Deshmukh,Mild Dementia,CRITICAL,True,Patient reacted to discomfort. Threshold may adjust.
