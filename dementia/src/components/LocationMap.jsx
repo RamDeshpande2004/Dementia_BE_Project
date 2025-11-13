@@ -1,21 +1,12 @@
 // src/components/LocationMap.jsx
-import React, { useEffect, useState } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Circle,
-  Popup,
-  useMap,
-} from "react-leaflet";
+import React, { useEffect, useRef } from "react";
+import { MapContainer, TileLayer, Marker, Circle, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Safe home center (Pune)
 const SAFE_CENTER = { lat: 18.5204, lng: 73.8567 };
 const SAFE_RADIUS_M = 300;
 
-// Marker icon
 const patientIcon = new L.Icon({
   iconUrl: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
   iconSize: [35, 35],
@@ -23,65 +14,70 @@ const patientIcon = new L.Icon({
   popupAnchor: [0, -30],
 });
 
-// Component to smoothly change map center when coordinates change
 function ChangeView({ center }) {
   const map = useMap();
   useEffect(() => {
     if (center) map.flyTo(center, 15, { duration: 1.0 });
-  }, [center, map]);
+  }, [JSON.stringify(center), map]);
   return null;
 }
 
-export default function LocationMap({
-  location,
-  locationName,
-  language = "en",
-  isOutOfZone,
-}) {
-  const [translatedLabel, setTranslatedLabel] = useState("");
-
-  // ✅ Language support for title
-  useEffect(() => {
-    if (language === "hi") setTranslatedLabel("रोगी का स्थान");
-    else if (language === "mr") setTranslatedLabel("रुग्णाचे स्थान");
-    else setTranslatedLabel("Patient Location");
-  }, [language]);
+function LocationMap({ location, locationName, language = "en", isOutOfZone, themeMode = "dark" }) {
+  const mapRef = useRef();
+  const safeColor = themeMode === "light" ? "#16a34a" : "#22c55e";
+  const alertColor = themeMode === "light" ? "#dc2626" : "#ef4444";
 
   return (
-    <section className="panel map-panel" style={{ textAlign: "center" }}>
-      <h3
-        style={{ marginBottom: "10px", fontSize: "1.25rem", color: "#60a5fa" }}
-      >
-        {translatedLabel}
-      </h3>
-
-      <div
-        className="map-wrapper"
-        style={{ height: "400px", borderRadius: "12px", overflow: "hidden" }}
-      >
+    <div style={{ width: "100%", textAlign: "center" }}>
+      {/* Map */}
+      <div style={{ height: "400px", borderRadius: "12px", overflow: "hidden", width: "100%" }}>
         <MapContainer
           center={[location.lat, location.lng]}
           zoom={15}
-          className="patient-map"
           style={{ height: "100%", width: "100%" }}
+          ref={mapRef}
         >
-          <ChangeView center={[location.lat, location.lng]} />
+          <ChangeView center={location} />
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
           <Circle
             center={[SAFE_CENTER.lat, SAFE_CENTER.lng]}
             radius={SAFE_RADIUS_M}
-            color={isOutOfZone ? "#ef4444" : "#22c55e"} // 🔴 red if outside, 🟢 green if inside
+            color={isOutOfZone ? alertColor : safeColor}
             fillOpacity={0.15}
           />
           <Marker position={[location.lat, location.lng]} icon={patientIcon}>
             <Popup>
-              <strong>{locationName}</strong>
+              <div style={{ fontWeight: 600, color: "#2563eb" }}>{locationName}</div>
+              <div style={{ fontSize: "0.85rem", color: "#6b7280" }}>
+                {isOutOfZone ? "Outside Safe Zone 🚨" : "Within Safe Zone ✅"}
+              </div>
             </Popup>
           </Marker>
         </MapContainer>
       </div>
 
-      {/* ✅ Display current location text below map */}
+      {/* Legend */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "2rem",
+          marginTop: "12px",
+          flexWrap: "wrap",
+          width: "100%",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", minWidth: "140px" }}>
+          <div style={{ width: "15px", height: "15px", backgroundColor: safeColor, borderRadius: "50%" }} />
+          <span style={{ whiteSpace: "nowrap", overflow: "visible" }}>Within Safe Zone</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", minWidth: "140px" }}>
+          <div style={{ width: "15px", height: "15px", backgroundColor: alertColor, borderRadius: "50%" }} />
+          <span style={{ whiteSpace: "nowrap", overflow: "visible" }}>Outside Safe Zone</span>
+        </div>
+      </div>
+
+      {/* Current Location */}
       <div style={{ marginTop: "10px", color: "#cbd5e1", fontSize: "1.1rem" }}>
         🧭{" "}
         {language === "hi"
@@ -91,6 +87,8 @@ export default function LocationMap({
           : `Current Location: ${locationName}`}{" "}
         ({isOutOfZone ? "🚨 Outside Safe Zone" : "✅ Within Safe Zone"})
       </div>
-    </section>
+    </div>
   );
 }
+
+export default React.memo(LocationMap);

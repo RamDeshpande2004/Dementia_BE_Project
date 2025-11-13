@@ -1,42 +1,21 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
-import { MapContainer, TileLayer, Marker, Circle, Popup } from "react-leaflet";
-import {
-  fetchSimulation,
-  fetchPrediction,
-  sendFeedbackAPI,
-  recalcThresholds,
-  fetchTTS,
-} from "./services/api";
+import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
+import { fetchSimulation, fetchPrediction } from "./services/api";
 
-import L from "leaflet";
 import Header from "./components/Header";
 import PatientSummary from "./components/PatientSummary";
 import SensorCards from "./components/SensorCards";
 import Notifications from "./components/Notifications";
-import { TEXTS, ALERT_TEXTS } from "./constants/texts";
-import {
-  SAFE_CENTER,
-  SAFE_RADIUS_M,
-  LOCATION_COORDS,
-} from "./constants/mapConstants";
-import { withinSafeZone, selectPrimaryAlertKey } from "./utils/helpers";
-
 import LocationMap from "./components/LocationMap";
 
-const BACKEND_URL = "http://127.0.0.1:5000";
-
-const patientIcon = new L.Icon({
-  iconUrl: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
-  iconSize: [35, 35],
-  iconAnchor: [17, 34],
-  popupAnchor: [0, -30],
-});
+import { TEXTS, ALERT_TEXTS } from "./constants/texts";
+import { SAFE_CENTER, LOCATION_COORDS } from "./constants/mapConstants";
+import { withinSafeZone, selectPrimaryAlertKey } from "./utils/helpers";
 
 export default function App() {
-  const [language, setLanguage] = useState("mr"); // default to Marathi since you switched
-  const T = TEXTS[language];
-
+  const [language, setLanguage] = useState("mr");
+  const [themeMode, setThemeMode] = useState("dark");
   const [data, setData] = useState(null);
   const [status, setStatus] = useState("Normal");
   const [alerts, setAlerts] = useState([]);
@@ -45,76 +24,123 @@ export default function App() {
   const [isOutOfZone, setIsOutOfZone] = useState(false);
   const [feedbackCount, setFeedbackCount] = useState(0);
   const [speakingMsg, setSpeakingMsg] = useState("");
-  const [toast, setToast] = useState(null);
 
   const lastAlertRef = useRef("");
   const lastStatusRef = useRef("");
   const lastLocNameRef = useRef("");
   const audioRef = useRef(null);
 
-  // TTS using backend with safe English fallback and no overlaps
-  const speak = async (text) => {
-    if (!text) return;
-    try {
-      // Stop any previous audio
+  const T = TEXTS[language];
+
+  // Theme setup
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: themeMode,
+          ...(themeMode === "light"
+            ? {
+                background: { default: "#F9FAFB", paper: "#FFFFFF" },
+                text: { primary: "#1E293B" },
+                primary: { main: "#2563EB" },
+              }
+            : {
+                background: { default: "#0F172A", paper: "#1E293B" },
+                text: { primary: "#E2E8F0" },
+                primary: { main: "#38BDF8" },
+              }),
+        },
+        typography: { fontFamily: "'Poppins', sans-serif" },
+      }),
+    [themeMode]
+  );
+
+  // TTS function
+ const speak = async (text) => {
+  if (!text) return;
+
+  try {
+    // Stop any currently playing audio immediately
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = "";
+      audioRef.current = null;
+    }
+
+    setSpeakingMsg(text);
+
+    const langCode = { en: "en", hi: "hi", mr: "mr" }[language] || "en";
+
+    const res = await fetch(`http://127.0.0.1:5000/tts/${langCode}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+
+    if (!res.ok && langCode !== "en") {
+      // fallback to English
+      const fallback = await fetch(`http://127.0.0.1:5000/tts/en`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      if (!fallback.ok) throw new Error("TTS failed");
+      const blobFallback = await fallback.blob();
+      const urlFallback = URL.createObjectURL(blobFallback);
+
+      // Stop any new audio again before playing fallback
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = "";
         audioRef.current = null;
       }
-      setSpeakingMsg(text);
 
-      const langCode = { en: "en", hi: "hi", mr: "mr" }[language] || "en";
-      let res = await fetch(`${BACKEND_URL}/tts/${langCode}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
-      });
-
-      // fallback to English once if language not supported
-      if (!res.ok && langCode !== "en") {
-        res = await fetch(`${BACKEND_URL}/tts/en`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text }),
-        });
-      }
-
-      if (!res.ok) throw new Error("TTS request failed");
-
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const audio = new Audio(url);
-      audioRef.current = audio;
-      audio.play();
-      audio.onended = () => {
+      const audioFallback = new Audio(urlFallback);
+      audioRef.current = audioFallback;
+      audioFallback.play();
+      audioFallback.onended = () => {
         setSpeakingMsg("");
-        URL.revokeObjectURL(url);
+        URL.revokeObjectURL(urlFallback);
         audioRef.current = null;
       };
-    } catch (err) {
-      console.error("TTS error:", err);
-      setSpeakingMsg("");
+      return;
     }
-  };
 
-  // 🧠 Poll simulation + prediction every 8s — fully synced with UI + TTS
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+
+    // Stop previous audio one last time before playing
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = "";
+      audioRef.current = null;
+    }
+
+    const audio = new Audio(url);
+    audioRef.current = audio;
+    audio.play();
+    audio.onended = () => {
+      setSpeakingMsg("");
+      URL.revokeObjectURL(url);
+      audioRef.current = null;
+    };
+  } catch (err) {
+    console.error("TTS error:", err);
+    setSpeakingMsg("");
+  }
+};
+  // Polling function
   const poll = async () => {
     try {
       const sData = await fetchSimulation();
       const patientId = sData.patient_id || "sunita_joshi";
       const pred = await fetchPrediction(patientId, sData);
-
-      // ✅ Update environment + prediction data
       setData(sData);
 
-      // ✅ Ensure UI updates properly
       const newStatus = pred.predicted_status || "Normal";
-      if (newStatus !== status) {
-        setStatus(newStatus);
-      }
+      setStatus(newStatus);
 
-      // ✅ Location tracking
+      // Location handling
       const locName = sData.location || sData.location_name || "Home - Kothrud";
       if (locName !== lastLocNameRef.current) {
         lastLocNameRef.current = locName;
@@ -124,20 +150,19 @@ export default function App() {
         setIsOutOfZone(!withinSafeZone(coords.lat, coords.lng));
       }
 
-      // ✅ Alert messages
+      // Alerts
       const key = selectPrimaryAlertKey(sData, pred.thresholds_used);
       const msg = ALERT_TEXTS[language][key];
-
-      if (msg && msg.trim() !== "" && msg !== lastAlertRef.current) {
+      if (msg && msg !== lastAlertRef.current) {
         lastAlertRef.current = msg;
-        setAlerts((a) => [
+        setAlerts((prev) => [
           { id: Date.now(), time: new Date().toLocaleTimeString(), msg },
-          ...a.slice(0, 10),
+          ...prev.slice(0, 10),
         ]);
-        speak(msg); // Queue safe
+        speak(msg); // speak alert
       }
 
-      // ✅ Speak environment status when it flips
+      // Status change announcement
       if (newStatus !== lastStatusRef.current) {
         lastStatusRef.current = newStatus;
         const phrases = {
@@ -161,52 +186,10 @@ export default function App() {
 
   useEffect(() => {
     poll();
-    const i = setInterval(poll, 8000);
-    return () => clearInterval(i);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const interval = setInterval(poll, 8000);
+    return () => clearInterval(interval);
   }, [language]);
 
-  // Feedback -> DB, recalc each 10
-  async function sendFeedback(reacted) {
-    try {
-      setToast({ type: "info", text: T.saving });
-      const payload = { reacted, ...(data || {}) };
-      const patientId = data?.patient_id || "sunita_joshi";
-      const res = await fetch(`${BACKEND_URL}/feedback/${patientId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error("feedback failed");
-      setFeedbackCount((f) => f + 1);
-      setToast({ type: "ok", text: T.saved });
-      setTimeout(() => setToast(null), 3000);
-    } catch (e) {
-      console.error("Feedback error:", e);
-      setToast({ type: "err", text: "Feedback failed" });
-      setTimeout(() => setToast(null), 3000);
-    }
-  }
-
-  useEffect(() => {
-    if (feedbackCount > 0 && feedbackCount % 10 === 0) autoRecalculate();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [feedbackCount]);
-
-  async function autoRecalculate() {
-    try {
-      const patientId = data?.patient_id || "sunita_joshi";
-      const res = await fetch(
-        `${BACKEND_URL}/recalculate_thresholds/${patientId}`
-      );
-      await res.json();
-      speak(T.thresholdsUpdated);
-    } catch (err) {
-      console.error("Recalc error:", err);
-    }
-  }
-
-  // Comfort index
   const comfort = useMemo(() => {
     if (!data) return 100;
     let score = 100;
@@ -219,68 +202,172 @@ export default function App() {
   const comfortColor =
     comfort > 75 ? "#22c55e" : comfort > 50 ? "#eab308" : "#ef4444";
 
-  const LBL = T.labels;
-
   return (
-    <div className="dashboard">
-      <Header T={T} language={language} setLanguage={setLanguage} />
-
-      <PatientSummary
-        T={T}
-        data={data}
-        comfort={comfort}
-        comfortColor={comfortColor}
-        locationName={locationName}
-        isOutOfZone={isOutOfZone}
-      />
-
-      <section
-        className={`status ${status === "Anomaly" ? "critical" : "normal"}`}
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <div
+        className="dashboard"
+        style={{
+          backgroundColor: theme.palette.background.default,
+          color: theme.palette.text.primary,
+          minHeight: "100vh",
+          transition: "background-color 0.5s ease, color 0.5s ease",
+        }}
       >
-        {status === "Anomaly" ? T.unsafe : T.safe}
-      </section>
+        <Header
+          T={T}
+          language={language}
+          setLanguage={setLanguage}
+          themeMode={themeMode}
+          setThemeMode={setThemeMode}
+        />
 
-      <SensorCards data={data} LBL={LBL} />
+        <PatientSummary
+          T={T}
+          data={data}
+          comfort={comfort}
+          comfortColor={comfortColor}
+          locationName={locationName}
+          isOutOfZone={isOutOfZone}
+          themeMode={themeMode}
+        />
 
-      {/* 🗺️ Dynamic Location Map Section */}
-      <section className="panel map-panel">
-        <h3>{T.map}</h3>
-        <div className="map-wrapper">
-          <LocationMap
-            location={location}
-            locationName={locationName}
-            isOutOfZone={isOutOfZone}
-          />
-        </div>
-      </section>
-
-      <section className="panel threshold-container">
-        <h3>{T.feedback}</h3>
-        <div className="feedback-buttons">
-          <button className="feedback-yes" onClick={() => sendFeedback(true)}>
-            {T.reacted}
-          </button>
-          <button className="feedback-no" onClick={() => sendFeedback(false)}>
-            {T.notReacted}
-          </button>
-        </div>
-        <p className="auto-note">
-          {T.feedbackNote} ({feedbackCount % 10}/10)
-        </p>
-      </section>
-
-      <Notifications alerts={alerts} T={T} />
-
-      {speakingMsg && <div className="voice-bubble">🔊 {speakingMsg}</div>}
-      {toast && (
-        <div
-          className={`feedback-toast ${
-            toast.type === "ok" ? "ok" : toast.type === "err" ? "err" : "info"
-          }`}
+        <section
+          className="status"
+          style={{
+            backgroundColor:
+              status === "Anomaly"
+                ? themeMode === "light"
+                  ? "#fee2e2"
+                  : "#7f1d1d"
+                : themeMode === "light"
+                ? "#dcfce7"
+                : "#064e3b",
+            color:
+              status === "Anomaly"
+                ? themeMode === "light"
+                  ? "#991b1b"
+                  : "#fecaca"
+                : themeMode === "light"
+                ? "#166534"
+                : "#bbf7d0",
+            borderRadius: "12px",
+            margin: "1rem auto",
+            width: "90%",
+            padding: "0.8rem",
+            textAlign: "center",
+            fontWeight: 600,
+            transition: "all 0.4s ease",
+          }}
         >
-          {toast.text}
-        </div>
-      )}
-    </div>
+          {status === "Anomaly" ? T.unsafe : T.safe}
+        </section>
+
+        <SensorCards data={data} LBL={T.labels} themeMode={themeMode} />
+
+     {/* Map Panel */} <section className="panel map-panel" style={{ backgroundColor: theme.palette.background.paper, color: theme.palette.text.primary, margin: "1.5rem auto", width: "90%", maxWidth: "1200px", borderRadius: "14px", padding: "1rem", boxShadow: themeMode === "dark" ? "0 4px 15px rgba(0,0,0,0.5)" : "0 4px 15px rgba(0,0,0,0.1)", transition: "all 0.4s ease", display: "flex", flexDirection: "column", alignItems: "center", }} > <h3 style={{ marginBottom: "0.8rem", textAlign: "center" }}>{T.map}</h3> <div className="map-wrapper" style={{ width: "100%", height: "450px", borderRadius: "12px", overflow: "hidden", display: "flex", flexDirection: "column", alignItems: "center", }} > <LocationMap location={location} locationName={locationName} isOutOfZone={isOutOfZone} themeMode={themeMode} language={language} /> </div> </section>
+
+        {/* Feedback Section */}
+        <section
+          className="panel feedback-section"
+          style={{
+            backgroundColor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
+            margin: "1.5rem auto",
+            width: "90%",
+            maxWidth: "1200px",
+            borderRadius: "14px",
+            padding: "1.5rem 2rem",
+            transition: "all 0.4s ease",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <h3 style={{ marginBottom: "1rem", textAlign: "center" }}>{T.feedback}</h3>
+
+          <div
+            className="feedback-buttons"
+            style={{
+              display: "flex",
+              gap: "1.5rem",
+              justifyContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
+            <button
+              className="feedback-yes"
+              style={{
+                padding: "0.8rem 2rem",
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer",
+                fontWeight: 600,
+                fontSize: "1rem",
+                backgroundColor: "#22c55e",
+                color: "#fff",
+                transition: "all 0.3s ease",
+              }}
+              onClick={() => setFeedbackCount((prev) => prev + 1)}
+            >
+              ✅ {T.reacted}
+            </button>
+
+            <button
+              className="feedback-no"
+              style={{
+                padding: "0.8rem 2rem",
+                borderRadius: "8px",
+                border: "none",
+                cursor: "pointer",
+                fontWeight: 600,
+                fontSize: "1rem",
+                backgroundColor: "#ef4444",
+                color: "#fff",
+                transition: "all 0.3s ease",
+              }}
+              onClick={() => setFeedbackCount((prev) => prev - 1)}
+            >
+              ❌ {T.notReacted}
+            </button>
+          </div>
+
+          <p
+            className="feedback-counter"
+            style={{
+              marginTop: "1rem",
+              color: theme.palette.text.secondary,
+              fontSize: "1rem",
+              transition: "color 0.3s ease",
+            }}
+          >
+            {T.feedbackNote} ({feedbackCount % 10}/10)
+          </p>
+        </section>
+
+        <Notifications alerts={alerts} T={T} themeMode={themeMode} />
+
+        {/* Voice bubble */}
+        {speakingMsg && (
+          <div
+            className="voice-bubble"
+            style={{
+              position: "fixed",
+              bottom: "2rem",
+              right: "2rem",
+              background: "#2563eb",
+              color: "#fff",
+              padding: "0.8rem 1rem",
+              borderRadius: "10px",
+              fontWeight: 500,
+              boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+              transition: "all 0.3s ease",
+            }}
+          >
+            🔊 {speakingMsg}
+          </div>
+        )}
+      </div>
+    </ThemeProvider>
   );
 }
