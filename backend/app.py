@@ -10,6 +10,7 @@ from gtts import gTTS
 import tempfile
 import atexit
 import pymongo
+import requests  # ✅ NEW
 
 # ======================================================
 # PATH SETUP
@@ -18,7 +19,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, ".."))
 MODEL_PATH = os.path.join(ROOT_DIR, "model", "isoforest_model.pkl")
 SCALER_PATH = os.path.join(ROOT_DIR, "model", "isoforest_scaler.pkl")
-DATA_PATH = os.path.join(ROOT_DIR, "data", "sunita_month_data.csv")
 
 # ======================================================
 # Flask setup
@@ -32,24 +32,55 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 try:
     iso_model = joblib.load(MODEL_PATH)
     scaler = joblib.load(SCALER_PATH)
-    print(f"✅ Isolation Forest model and scaler loaded from {MODEL_PATH}")
+    print(f"✅ Model and scaler loaded")
 except Exception as e:
     print("❌ Model loading error:", e)
     iso_model, scaler = None, None
 
 # ======================================================
-# Load Sunita Joshi data
+# 🔥 ThingSpeak Fetch Function
 # ======================================================
-try:
-    df_sim = pd.read_csv(DATA_PATH)
-    df_sim = df_sim[df_sim["patient_id"] == "sunita_joshi"]
-    print(f"📊 Loaded {len(df_sim):,} records from {DATA_PATH} for Sunita Joshi.")
-except Exception as e:
-    print("⚠️ Data load error:", e)
-    df_sim = pd.DataFrame()
+def get_thingspeak_data():
+    try:
+        url = "https://api.thingspeak.com/channels/3245854/feeds.json?api_key=S5ETY5FU945AUI4S&results=1"
 
+        response = requests.get(url)
+        data = response.json()
+
+        if "feeds" not in data or len(data["feeds"]) == 0:
+            print("⚠️ No data received from ThingSpeak")
+            return None
+
+        feed = data["feeds"][0]
+
+        # Check if fields are present
+        if not all([feed.get("field1"), feed.get("field2"), feed.get("field3"), feed.get("field4")]):
+            print("⚠️ Incomplete sensor data received")
+            print("Raw feed:", feed)
+            return None
+
+        sensor_data = {
+            "temperature": float(feed["field3"]),
+            "humidity": float(feed["field4"]),
+            "noise_level": float(feed["field2"]),
+            "light_intensity": float(feed["field1"])
+        }
+
+        # ✅ SUCCESS LOG
+        print("\n✅ Sensor Data Received Successfully:")
+        print(f"🌡️ Temperature: {sensor_data['temperature']} °C")
+        print(f"💧 Humidity: {sensor_data['humidity']} %")
+        print(f"🔊 Noise Level: {sensor_data['noise_level']}")
+        print(f"💡 Light Intensity: {sensor_data['light_intensity']}")
+        print("--------------------------------------------------")
+
+        return sensor_data
+
+    except Exception as e:
+        print("❌ ThingSpeak fetch error:", e)
+        return None
 # ======================================================
-# Recalculate thresholds
+# Threshold recalculation (UNCHANGED)
 # ======================================================
 def recalculate_thresholds(patient_id):
     try:
@@ -59,9 +90,10 @@ def recalculate_thresholds(patient_id):
 
         df = pd.DataFrame(data)
         features = [
-            "temperature", "humidity", "air_quality_index",
-            "co2", "noise_level", "light_intensity"
+            "temperature", "humidity",
+            "noise_level", "light_intensity"
         ]
+
         new_thresholds = {}
         for f in features:
             reacted = df[df["reacted"] == True][f].dropna()
@@ -76,6 +108,7 @@ def recalculate_thresholds(patient_id):
                 upsert=True,
             )
         return new_thresholds
+
     except Exception as e:
         print("⚠️ Threshold update error:", e)
         return None
@@ -86,68 +119,57 @@ def recalculate_thresholds(patient_id):
 @app.route("/")
 def home():
     return jsonify({
-        "message": "🌿 Dementia Safety Backend (Sunita Joshi) Running ✅",
+        "message": "🌿 Dementia Safety Backend Running ✅",
         "routes": [
-            "/simulate", "/predict/<id>", "/feedback/<id>",
+            "/predict/<id>", "/feedback/<id>",
             "/recalculate_thresholds/<id>", "/tts/<lang>", "/api/status",
         ]
     })
 
-@app.route("/simulate", methods=["GET"])
-def simulate_data():
-    try:
-        if df_sim.empty:
-            raise Exception("No dataset loaded.")
-        sample = df_sim.sample(1).iloc[0].to_dict()
-        response = {
-            "temperature": float(sample["temperature"]),
-            "humidity": float(sample["humidity"]),
-            "air_quality_index": float(sample["air_quality_index"]),
-            "co2": float(sample["co2"]),
-            "noise_level": float(sample["noise_level"]),
-            "light_intensity": float(sample["light_intensity"]),
-            "location": sample["location_name"],
-            "patient_id": "sunita_joshi",
-            "patient_name": "Mrs. Sunita Joshi",
-            "caregiver_name": "Arti Deshmukh",
-            "condition": "Mild Dementia",
-        }
-        return jsonify(response), 200
-    except Exception as e:
-        print("❌ Simulate route error:", e)
-        return jsonify({"error": str(e)}), 500
-
-@app.route("/predict/<patient_id>", methods=["POST"])
+# ======================================================
+# 🔥 MAIN PREDICT (NOW USING THINGSPEAK)
+# ======================================================
+@app.route("/predict/<patient_id>", methods=["GET"])
 def predict_status(patient_id):
     try:
-        data = request.get_json(force=True)
+        # 🔥 Get data from ThingSpeak
+        data = get_thingspeak_data()
+
+        if not data:
+            print("⚠️ No valid data to predict")            
+            return jsonify({"error": "Failed to fetch ThingSpeak data"}), 500
+
         if iso_model is None or scaler is None:
             return jsonify({"error": "Model not loaded"}), 500
 
-        features = ["temperature", "humidity", "air_quality_index", "co2", "noise_level", "light_intensity"]
+        features = ["temperature", "humidity", "noise_level", "light_intensity"]
+
         clean_data = {k: float(data.get(k, 0)) for k in features}
         df = pd.DataFrame([clean_data]).fillna(0)
+
         X_scaled = scaler.transform(df)
         prediction = iso_model.predict(X_scaled)
         label = "Anomaly" if prediction[0] == -1 else "Normal"
-
+        print("\n🧠 Prediction Result:")
+        print(f"➡️ Status: {label}")
+        print(f"📊 Input Data: {clean_data}")
+        print("=====================================")
         thresholds_doc = patient_thresholds.find_one({"patient_id": patient_id}) or {}
         thresholds = thresholds_doc.get("thresholds", {
-            "temperature": 35, "humidity": 60, "air_quality_index": 200,
-            "co2": 1000, "noise_level": 85, "light_intensity": 200,
+            "temperature": 35,
+            "humidity": 60,
+            "noise_level": 2.0,  # ✅ FIXED
+            "light_intensity": 200,
         })
 
         alerts = []
         if clean_data["temperature"] > thresholds["temperature"]:
             alerts.append("🌡️ Temperature high — check ventilation.")
-        if clean_data["co2"] > thresholds["co2"]:
-            alerts.append("🫁 CO₂ elevated — open windows.")
-        if clean_data["air_quality_index"] > thresholds["air_quality_index"]:
-            alerts.append("🌫️ Poor air quality — use purifier.")
         if clean_data["noise_level"] > thresholds["noise_level"]:
             alerts.append("🔊 Noise too high — quieter area advised.")
         if clean_data["light_intensity"] < thresholds["light_intensity"]:
             alerts.append("💡 Low light — improve illumination.")
+
         if not alerts:
             alerts.append("✅ Environment stable and safe.")
 
@@ -163,6 +185,9 @@ def predict_status(patient_id):
         print("❌ Predict route error:", e)
         return jsonify({"error": str(e)}), 500
 
+# ======================================================
+# Feedback (UNCHANGED)
+# ======================================================
 @app.route("/feedback/<patient_id>", methods=["POST"])
 def save_feedback(patient_id):
     try:
@@ -172,9 +197,11 @@ def save_feedback(patient_id):
         reaction_history.insert_one(data)
         return jsonify({"message": "✅ Feedback saved"}), 201
     except Exception as e:
-        print("❌ Feedback route error:", e)
         return jsonify({"error": str(e)}), 500
 
+# ======================================================
+# Threshold update (UNCHANGED)
+# ======================================================
 @app.route("/recalculate_thresholds/<patient_id>", methods=["GET"])
 def manual_recalculate(patient_id):
     new_t = recalculate_thresholds(patient_id)
@@ -184,7 +211,7 @@ def manual_recalculate(patient_id):
     })
 
 # ======================================================
-# TTS (Hindi / Marathi / English)
+# TTS (UNCHANGED)
 # ======================================================
 @app.route("/tts/<lang>", methods=["POST"])
 def generate_tts(lang):
@@ -204,40 +231,34 @@ def generate_tts(lang):
         tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
         tts.save(tmp.name)
         return send_file(tmp.name, mimetype="audio/mpeg")
+
     except Exception as e:
-        print("❌ TTS route error:", e)
         return jsonify({"error": str(e)}), 500
 
+# ======================================================
+# Status
+# ======================================================
 @app.route("/api/status")
 def system_status():
     return jsonify({
         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "backend_status": "Online ✅",
-        "records_loaded": len(df_sim),
     })
 
 # ======================================================
-# Graceful MongoDB shutdown
+# Cleanup
 # ======================================================
 @atexit.register
 def close_mongo_connection():
     try:
         if db and hasattr(db, "client"):
             db.client.close()
-            print("🧹 MongoDB connection closed cleanly.")
-        # explicitly stop PyMongo monitoring threads
-        from pymongo import monitoring
-        for listener in monitoring._listeners.get_listeners():
-            try:
-                listener.close()
-            except Exception:
-                pass
-    except Exception as e:
-        print("⚠️ MongoDB close error:", e)
+    except:
+        pass
 
 # ======================================================
-# Run server
+# Run
 # ======================================================
 if __name__ == "__main__":
-    print("🚀 Flask backend running on 0.0.0.0:5000 for Sunita Joshi data")
-    app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)
+    print("🚀 Backend running on http://0.0.0.0:5000")
+    app.run(host="0.0.0.0", port=5000, debug=True)

@@ -1,16 +1,16 @@
 import React from "react";
 import { Card, CardContent, Typography, Box, LinearProgress } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
+// import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ThermostatIcon from "@mui/icons-material/Thermostat";
 
 export default function PatientSummary({
-  T,
-  data,
+  // T,
+  // data,
   comfort,
   comfortColor,
-  locationName,
-  isOutOfZone,
+  // locationName,
+  // isOutOfZone,
   themeMode,
 }) {
   const isLight = themeMode === "light";
@@ -39,32 +39,32 @@ export default function PatientSummary({
     >
       <CardContent>
         <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
-          {T.summary || "Patient Summary"}
+          { "Patient Summary"}
         </Typography>
 
         <Box sx={{ display: "grid", gap: 2 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <FavoriteIcon sx={{ color: "#f43f5e" }} />
             <Typography>
-              <strong>{T.caregiver}:</strong> {data?.caregiver_name || "Arti Deshmukh"}
+              <strong>Caregiver:</strong> { "Arti Deshmukh"}
             </Typography>
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <ThermostatIcon sx={{ color: "#2563eb" }} />
             <Typography>
-              <strong>{T.patient}:</strong> {data?.patient_name || "Mrs. Sunita Joshi"}
+              <strong>Patient:</strong> { "Mrs. Neha Kanaki"}
             </Typography>
           </Box>
 
           <Typography>
-            <strong>{T.condition}:</strong> {data?.condition || T.mild}
+            <strong>Condition:</strong> {"Mild Dementia"}
           </Typography>
 
           {/* Comfort Level */}
           <Box sx={{ mt: 1 }}>
             <Typography sx={{ mb: 0.5 }}>
-              <strong>{T.comfort}:</strong>
+              <strong>{comfort}:</strong>
             </Typography>
             <LinearProgress
               variant="determinate"
@@ -85,7 +85,7 @@ export default function PatientSummary({
           </Box>
 
           {/* Location */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
+          {/* <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
             <LocationOnIcon sx={{ color: isOutOfZone ? "#ef4444" : "#22c55e" }} />
             <Typography>
               <strong>{T.map}:</strong> {locationName} (
@@ -99,7 +99,7 @@ export default function PatientSummary({
               </span>
               )
             </Typography>
-          </Box>
+          </Box> */}
         </Box>
       </CardContent>
     </Card>

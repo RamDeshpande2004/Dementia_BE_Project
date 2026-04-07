@@ -4,8 +4,8 @@ import {
   WaterDrop as HumidityIcon,
   Thermostat as TempIcon,
   VolumeUp as NoiseIcon,
-  Co2 as Co2Icon,
-  Air as AQIIcon,
+  // Co2 as Co2Icon,
+  // Air as AQIIcon,
 } from "@mui/icons-material";
 
 export default function SensorCards({ data, LBL, themeMode = "dark" }) {
@@ -65,26 +65,6 @@ export default function SensorCards({ data, LBL, themeMode = "dark" }) {
         </div>
       </div>
 
-      {/* 🧪 CO₂ */}
-      <div style={getCardStyle(data?.co2 > 1000)}>
-        <Co2Icon style={getIconStyle(data?.co2 > 1000)} />
-        <div style={{ fontSize: "1rem", fontWeight: 600 }}>{LBL.co2}</div>
-        <div style={{ fontSize: "1.3rem", fontWeight: 700 }}>
-          {data?.co2 != null ? `${data.co2.toFixed(0)} ${LBL.units.ppm}` : "–"}
-        </div>
-      </div>
-
-      {/* 🌬 Air Quality */}
-      <div style={getCardStyle(data?.air_quality_index > 200)}>
-        <AQIIcon style={getIconStyle(data?.air_quality_index > 200)} />
-        <div style={{ fontSize: "1rem", fontWeight: 600 }}>{LBL.aqi}</div>
-        <div style={{ fontSize: "1.3rem", fontWeight: 700 }}>
-          {data?.air_quality_index != null
-            ? `${data.air_quality_index.toFixed(0)}`
-            : "–"}
-        </div>
-      </div>
-
       {/* 🔊 Noise */}
       <div style={getCardStyle(data?.noise_level > 85)}>
         <NoiseIcon style={getIconStyle(data?.noise_level > 85)} />
@@ -106,6 +86,8 @@ export default function SensorCards({ data, LBL, themeMode = "dark" }) {
             : "–"}
         </div>
       </div>
+
+
 
       {/* 💧 Humidity */}
       <div style={getCardStyle(data?.humidity > 60)}>
