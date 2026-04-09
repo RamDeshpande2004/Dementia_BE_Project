@@ -1,8 +1,3 @@
-# ============================================================
-# model/anomaly_isoforest.py
-# Train Isolation Forest + Test with Dynamic Input
-# ============================================================
-
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import IsolationForest
@@ -10,9 +5,6 @@ from sklearn.preprocessing import StandardScaler
 import joblib, os
 from datetime import datetime
 
-# ============================================================
-# PATH SETUP (✅ FIXED)
-# ============================================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, ".."))
 
@@ -20,18 +12,12 @@ DATA_PATH = os.path.join(ROOT_DIR, "data", "sunita_month_data.csv")
 MODEL_DIR = os.path.join(ROOT_DIR, "model")
 OUTPUT_PATH = os.path.join(ROOT_DIR, "data", "sunita_processed.csv")
 
-# ============================================================
-# 1. LOAD DATA
-# ============================================================
 if not os.path.exists(DATA_PATH):
     raise FileNotFoundError(f"❌ Dataset not found at {DATA_PATH}")
 
 df = pd.read_csv(DATA_PATH)
 print(f"📂 Loaded dataset with {len(df):,} records")
 
-# ============================================================
-# 2. FEATURE SELECTION (UPDATED)
-# ============================================================
 features = [
     "temperature",
     "humidity",
@@ -50,17 +36,13 @@ meta_cols = [
     "condition",
 ]
 
-# Clean data
 df = df.dropna(subset=features)
 df[features] = df[features].fillna(df[features].mean())
 
-# ============================================================
-# 3. TRAIN ISOLATION FOREST
-# ============================================================
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(df[features])
 
-contamination = 0.04  # fixed
+contamination = 0.04  
 
 iso = IsolationForest(
     n_estimators=300,
@@ -72,9 +54,6 @@ iso = IsolationForest(
 df["anomaly_flag"] = iso.fit_predict(X_scaled)
 df["anomaly_label"] = df["anomaly_flag"].map({1: "Normal", -1: "Anomaly"})
 
-# ============================================================
-# 4. SAVE MODEL
-# ============================================================
 os.makedirs(MODEL_DIR, exist_ok=True)
 
 joblib.dump(iso, os.path.join(MODEL_DIR, "isoforest_model.pkl"))
@@ -89,13 +68,9 @@ metadata = {
 
 joblib.dump(metadata, os.path.join(MODEL_DIR, "isoforest_metadata.pkl"))
 
-# Save processed file
 df_out = df[meta_cols + features + ["anomaly_label"]]
 df_out.to_csv(OUTPUT_PATH, index=False)
 
-# ============================================================
-# 5. SUMMARY
-# ============================================================
 normal = (df["anomaly_label"] == "Normal").sum()
 anomaly = (df["anomaly_label"] == "Anomaly").sum()
 ratio = anomaly / max(1, (normal + anomaly))
@@ -106,9 +81,6 @@ print(f"💾 Model → {MODEL_DIR}/isoforest_model.pkl")
 print(f"💾 Scaler → {MODEL_DIR}/isoforest_scaler.pkl")
 print(f"📄 Processed data → {OUTPUT_PATH}")
 
-# ============================================================
-# 🔥 6. TEST WITH DYNAMIC INPUT (SIMULATION)
-# ============================================================
 
 test_data = {
     "temperature": 32,
