@@ -1,8 +1,6 @@
-// src/services/api.js
 
 const BACKEND_URL = "http://127.0.0.1:5000";
 
-// 🤖 Fetch real-time prediction (ThingSpeak → Backend → Model)
 export async function fetchPrediction(patientId) {
   try {
     const res = await fetch(`${BACKEND_URL}/predict/${patientId}`);
@@ -21,7 +19,6 @@ export async function fetchPrediction(patientId) {
   }
 }
 
-// 🧭 Send feedback (caregiver reaction)
 export async function sendFeedbackAPI(patientId, payload) {
   const res = await fetch(`${BACKEND_URL}/feedback/${patientId}`, {
     method: "POST",
@@ -33,7 +30,6 @@ export async function sendFeedbackAPI(patientId, payload) {
   return res.json();
 }
 
-// 🔄 Recalculate adaptive thresholds
 export async function recalcThresholds(patientId) {
   const res = await fetch(`${BACKEND_URL}/recalculate_thresholds/${patientId}`);
 
@@ -42,7 +38,6 @@ export async function recalcThresholds(patientId) {
 }
 
 
-// 🔊 Generate Text-to-Speech
 export async function fetchTTS(lang, text) {
   const res = await fetch(`${BACKEND_URL}/tts/${lang}`, {
     method: "POST",

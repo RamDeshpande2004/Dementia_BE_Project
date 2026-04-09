@@ -48,7 +48,6 @@ export default function Header({
           py: 1.5,
         }}
       >
-        {/* Logo + Title */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
           <FavoriteIcon
             sx={{
@@ -70,9 +69,7 @@ export default function Header({
           </Typography>
         </Box>
 
-        {/* Controls: Language, Theme, Avatar */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          {/* Language Selector */}
           <Box
             sx={{
               display: "flex",
@@ -113,7 +110,6 @@ export default function Header({
             </Select>
           </Box>
 
-          {/* Theme Toggle */}
           <Tooltip
             title={isLight ? "Switch to Dark Mode" : "Switch to Light Mode"}
           >
@@ -138,7 +134,6 @@ export default function Header({
             </IconButton>
           </Tooltip>
 
-          {/* User Avatar */}
           <Tooltip title="Profile">
             <Avatar
               sx={{
@@ -156,7 +151,6 @@ export default function Header({
         </Box>
       </Toolbar>
 
-      {/* Heartbeat animation */}
       <style>
         {`
           @keyframes heartbeat {

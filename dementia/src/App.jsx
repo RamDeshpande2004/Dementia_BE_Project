@@ -38,7 +38,6 @@ export default function App() {
     console.error(err);
   }
 };
-  // ================= THEME =================
   const theme = useMemo(
     () =>
       createTheme({
@@ -61,7 +60,6 @@ export default function App() {
     [themeMode]
   );
 
-  // ================= TTS =================
   const speak = async (text) => {
     if (!text) return;
 
@@ -99,7 +97,6 @@ export default function App() {
     }
   };
 
-  // ================= ALERT TYPE =================
   const getAlertType = (key, status) => {
     if (status === "Anomaly") return "error";
     if (key.includes("danger") || key.includes("very")) return "error";
@@ -108,7 +105,6 @@ export default function App() {
     return "info";
   };
 
-  // ================= POLLING =================
   const poll = async () => {
     try {
       const patientId = "neha_kanaki";
@@ -121,7 +117,6 @@ export default function App() {
       const newStatus = res.predicted_status || "Normal";
       setStatus(newStatus);
 
-      // ================= ALERTS =================
       const key = selectPrimaryAlertKey(sensorData, res.thresholds_used);
       const msg = ALERT_TEXTS[language][key];
       const alertType = getAlertType(key, newStatus);
@@ -142,7 +137,6 @@ export default function App() {
         speak(msg);
       }
 
-      // ================= STATUS VOICE =================
       if (newStatus !== lastStatusRef.current) {
         lastStatusRef.current = newStatus;
 
@@ -172,7 +166,6 @@ export default function App() {
     return () => clearInterval(interval);
   }, [language]);
 
-  // ================= COMFORT =================
   const comfort = useMemo(() => {
     if (!data) return 100;
     let score = 100;
@@ -206,31 +199,12 @@ export default function App() {
           themeMode={themeMode}
         />
 
-        {/* STATUS */}
         <section className="status">
           {status === "Anomaly" ? T.unsafe : T.safe}
         </section>
 
         <SensorCards data={data} LBL={T.labels} themeMode={themeMode} />
 
-        {/* FEEDBACK */}
-        {/* <section className="panel feedback-section">
-          <h3>{T.feedback}</h3>
-
-          <div className="feedback-buttons">
-            <button onClick={() => setFeedbackCount((p) => p + 1)}>
-              ✅ {T.reacted}
-            </button>
-
-            <button onClick={() => setFeedbackCount((p) => p - 1)}>
-              ❌ {T.notReacted}
-            </button>
-          </div>
-
-          <p>
-            {T.feedbackNote} ({feedbackCount % 10}/10)
-          </p>
-        </section> */}
           <StatusAndFeedback
             status={status}
             T={T}
@@ -239,7 +213,6 @@ export default function App() {
           />
         <Notifications alerts={alerts} T={T} themeMode={themeMode} />
 
-        {/* VOICE BUBBLE */}
         {speakingMsg && <div className="voice-bubble">🔊 {speakingMsg}</div>}
       </div>
     </ThemeProvider>

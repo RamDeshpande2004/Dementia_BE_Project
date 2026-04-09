@@ -10,25 +10,16 @@ from gtts import gTTS
 import tempfile
 import atexit
 import pymongo
-import requests  # ✅ NEW
+import requests  
 
-# ======================================================
-# PATH SETUP
-# ======================================================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, ".."))
 MODEL_PATH = os.path.join(ROOT_DIR, "model", "isoforest_model.pkl")
 SCALER_PATH = os.path.join(ROOT_DIR, "model", "isoforest_scaler.pkl")
 
-# ======================================================
-# Flask setup
-# ======================================================
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-# ======================================================
-# Load model & scaler
-# ======================================================
 try:
     iso_model = joblib.load(MODEL_PATH)
     scaler = joblib.load(SCALER_PATH)
@@ -37,9 +28,6 @@ except Exception as e:
     print("❌ Model loading error:", e)
     iso_model, scaler = None, None
 
-# ======================================================
-# 🔥 ThingSpeak Fetch Function
-# ======================================================
 def get_thingspeak_data():
     try:
         url = "https://api.thingspeak.com/channels/3245854/feeds.json?api_key=S5ETY5FU945AUI4S&results=1"
@@ -53,7 +41,6 @@ def get_thingspeak_data():
 
         feed = data["feeds"][0]
 
-        # Check if fields are present
         if not all([feed.get("field1"), feed.get("field2"), feed.get("field3"), feed.get("field4")]):
             print("⚠️ Incomplete sensor data received")
             print("Raw feed:", feed)
@@ -66,7 +53,6 @@ def get_thingspeak_data():
             "light_intensity": float(feed["field1"])
         }
 
-        # ✅ SUCCESS LOG
         print("\n✅ Sensor Data Received Successfully:")
         print(f"🌡️ Temperature: {sensor_data['temperature']} °C")
         print(f"💧 Humidity: {sensor_data['humidity']} %")
@@ -79,9 +65,7 @@ def get_thingspeak_data():
     except Exception as e:
         print("❌ ThingSpeak fetch error:", e)
         return None
-# ======================================================
-# Threshold recalculation (UNCHANGED)
-# ======================================================
+
 def recalculate_thresholds(patient_id):
     try:
         data = list(reaction_history.find({"patient_id": patient_id}))
@@ -113,9 +97,6 @@ def recalculate_thresholds(patient_id):
         print("⚠️ Threshold update error:", e)
         return None
 
-# ======================================================
-# Routes
-# ======================================================
 @app.route("/")
 def home():
     return jsonify({
@@ -126,13 +107,9 @@ def home():
         ]
     })
 
-# ======================================================
-# 🔥 MAIN PREDICT (NOW USING THINGSPEAK)
-# ======================================================
 @app.route("/predict/<patient_id>", methods=["GET"])
 def predict_status(patient_id):
     try:
-        # 🔥 Get data from ThingSpeak
         data = get_thingspeak_data()
 
         if not data:
@@ -158,7 +135,7 @@ def predict_status(patient_id):
         thresholds = thresholds_doc.get("thresholds", {
             "temperature": 35,
             "humidity": 60,
-            "noise_level": 2.0,  # ✅ FIXED
+            "noise_level": 2.0,  
             "light_intensity": 200,
         })
 
@@ -185,9 +162,6 @@ def predict_status(patient_id):
         print("❌ Predict route error:", e)
         return jsonify({"error": str(e)}), 500
 
-# ======================================================
-# Feedback (UNCHANGED)
-# ======================================================
 @app.route("/feedback/<patient_id>", methods=["POST"])
 def save_feedback(patient_id):
     try:
@@ -199,9 +173,6 @@ def save_feedback(patient_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# ======================================================
-# Threshold update (UNCHANGED)
-# ======================================================
 @app.route("/recalculate_thresholds/<patient_id>", methods=["GET"])
 def manual_recalculate(patient_id):
     new_t = recalculate_thresholds(patient_id)
@@ -210,9 +181,6 @@ def manual_recalculate(patient_id):
         "thresholds": new_t
     })
 
-# ======================================================
-# TTS (UNCHANGED)
-# ======================================================
 @app.route("/tts/<lang>", methods=["POST"])
 def generate_tts(lang):
     try:
@@ -235,9 +203,6 @@ def generate_tts(lang):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# ======================================================
-# Status
-# ======================================================
 @app.route("/api/status")
 def system_status():
     return jsonify({
@@ -245,9 +210,6 @@ def system_status():
         "backend_status": "Online ✅",
     })
 
-# ======================================================
-# Cleanup
-# ======================================================
 @atexit.register
 def close_mongo_connection():
     try:
@@ -256,9 +218,6 @@ def close_mongo_connection():
     except:
         pass
 
-# ======================================================
-# Run
-# ======================================================
 if __name__ == "__main__":
     print("🚀 Backend running on http://0.0.0.0:5000")
     app.run(host="0.0.0.0", port=5000, debug=True)

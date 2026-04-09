@@ -4,8 +4,6 @@ import {
   WaterDrop as HumidityIcon,
   Thermostat as TempIcon,
   VolumeUp as NoiseIcon,
-  // Co2 as Co2Icon,
-  // Air as AQIIcon,
 } from "@mui/icons-material";
 
 export default function SensorCards({ data, LBL, themeMode = "dark" }) {
@@ -14,11 +12,11 @@ export default function SensorCards({ data, LBL, themeMode = "dark" }) {
   const getCardStyle = (condition) => ({
     backgroundColor: condition
       ? isDark
-        ? "rgba(239,68,68,0.15)" // red tint for danger (dark mode)
-        : "rgba(239,68,68,0.1)" // red tint (light mode)
+        ? "rgba(239,68,68,0.15)" 
+        : "rgba(239,68,68,0.1)" 
       : isDark
-      ? "rgba(30,41,59,0.9)" // dark background
-      : "rgba(255,255,255,0.9)", // light background
+      ? "rgba(30,41,59,0.9)" 
+      : "rgba(255,255,255,0.9)", 
     border: condition
       ? "2px solid #ef4444"
       : isDark
@@ -54,7 +52,6 @@ export default function SensorCards({ data, LBL, themeMode = "dark" }) {
         padding: "20px",
       }}
     >
-      {/* 🌡 Temperature */}
       <div style={getCardStyle(data?.temperature > 35)}>
         <TempIcon style={getIconStyle(data?.temperature > 35)} />
         <div style={{ fontSize: "1rem", fontWeight: 600 }}>{LBL.temperature}</div>
@@ -65,7 +62,6 @@ export default function SensorCards({ data, LBL, themeMode = "dark" }) {
         </div>
       </div>
 
-      {/* 🔊 Noise */}
       <div style={getCardStyle(data?.noise_level > 85)}>
         <NoiseIcon style={getIconStyle(data?.noise_level > 85)} />
         <div style={{ fontSize: "1rem", fontWeight: 600 }}>{LBL.noise}</div>
@@ -76,7 +72,6 @@ export default function SensorCards({ data, LBL, themeMode = "dark" }) {
         </div>
       </div>
 
-      {/* 💡 Light */}
       <div style={getCardStyle(data?.light_intensity < 200)}>
         <LightIcon style={getIconStyle(data?.light_intensity < 200)} />
         <div style={{ fontSize: "1rem", fontWeight: 600 }}>{LBL.light}</div>
@@ -89,7 +84,6 @@ export default function SensorCards({ data, LBL, themeMode = "dark" }) {
 
 
 
-      {/* 💧 Humidity */}
       <div style={getCardStyle(data?.humidity > 60)}>
         <HumidityIcon style={getIconStyle(data?.humidity > 60)} />
         <div style={{ fontSize: "1rem", fontWeight: 600 }}>{LBL.humidity}</div>

@@ -9,10 +9,9 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 export default function Notifications({ alerts, T, themeMode }) {
   const isLight = themeMode === "light";
 
-  // Function to choose icon based on alert type
   const getAlertIcon = (type) => {
     const size = 20;
-    const color = isLight ? "#2563eb" : "#38bdf8"; // default icon color
+    const color = isLight ? "#2563eb" : "#38bdf8"; 
     switch (type) {
       case "info":
         return <InfoIcon sx={{ fontSize: size, color }} />;
@@ -39,7 +38,6 @@ export default function Notifications({ alerts, T, themeMode }) {
         transition: "all 0.4s ease",
       }}
     >
-      {/* Header */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 2 }}>
         <NotificationsIcon sx={{ color: isLight ? "#2563eb" : "#38bdf8", fontSize: 28 }} />
         <Typography
@@ -50,7 +48,6 @@ export default function Notifications({ alerts, T, themeMode }) {
         </Typography>
       </Box>
 
-      {/* Alerts */}
       {alerts.length ? (
         <Stack spacing={1}>
           {alerts.map((a) => (
@@ -66,12 +63,10 @@ export default function Notifications({ alerts, T, themeMode }) {
                 border: `1px solid ${isLight ? "#e5e7eb" : "#334155"}`,
                 transition: "all 0.3s ease",
               }}
-              elevation={0} // remove shadow
+              elevation={0} 
             >
-              {/* Alert Icon */}
               {getAlertIcon(a.type)}
 
-              {/* Alert Content */}
               <Box sx={{ display: "flex", flexDirection: "column" }}>
                 <Typography sx={{ fontSize: 13, color: isLight ? "#6b7280" : "#94a3b8" }}>
                   {a.time}

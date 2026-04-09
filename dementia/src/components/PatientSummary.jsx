@@ -1,16 +1,11 @@
 import React from "react";
 import { Card, CardContent, Typography, Box, LinearProgress } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-// import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ThermostatIcon from "@mui/icons-material/Thermostat";
 
 export default function PatientSummary({
-  // T,
-  // data,
   comfort,
   comfortColor,
-  // locationName,
-  // isOutOfZone,
   themeMode,
 }) {
   const isLight = themeMode === "light";
@@ -61,7 +56,6 @@ export default function PatientSummary({
             <strong>Condition:</strong> {"Mild Dementia"}
           </Typography>
 
-          {/* Comfort Level */}
           <Box sx={{ mt: 1 }}>
             <Typography sx={{ mb: 0.5 }}>
               <strong>{comfort}:</strong>
@@ -83,23 +77,6 @@ export default function PatientSummary({
               {comfort.toFixed(0)}%
             </Typography>
           </Box>
-
-          {/* Location */}
-          {/* <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
-            <LocationOnIcon sx={{ color: isOutOfZone ? "#ef4444" : "#22c55e" }} />
-            <Typography>
-              <strong>{T.map}:</strong> {locationName} (
-              <span
-                style={{
-                  color: isOutOfZone ? "#ef4444" : "#22c55e",
-                  fontWeight: 600,
-                }}
-              >
-                {isOutOfZone ? T.zoneOut : T.zoneIn}
-              </span>
-              )
-            </Typography>
-          </Box> */}
         </Box>
       </CardContent>
     </Card>
