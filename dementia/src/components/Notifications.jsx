@@ -49,39 +49,79 @@ export default function Notifications({ alerts, T, themeMode }) {
       </Box>
 
       {alerts.length ? (
-        <Stack spacing={1}>
-          {alerts.map((a) => (
-            <Paper
-              key={a.id}
-              sx={{
-                p: 1.5,
-                display: "flex",
-                alignItems: "center",
-                gap: 1.5,
-                borderRadius: 2,
-                backgroundColor: isLight ? "#f9fafb" : "#1e293b",
-                border: `1px solid ${isLight ? "#e5e7eb" : "#334155"}`,
-                transition: "all 0.3s ease",
-              }}
-              elevation={0} 
-            >
-              {getAlertIcon(a.type)}
+        <Stack spacing={2}>
+          {alerts.map((a) => {
+            const typeColors = {
+              info: { bg: "#eff6ff", border: "#0066cc", icon: "#0066cc", bgHover: "#e0eeff" },
+              warning: { bg: "#fffbf0", border: "#f59e0b", icon: "#f59e0b", bgHover: "#fffbeb" },
+              error: { bg: "#fef2f2", border: "#ef4444", icon: "#dc2626", bgHover: "#fff5f5" },
+              success: { bg: "#f0fdf4", border: "#10b981", icon: "#10b981", bgHover: "#dcfce7" }
+            };
+            const colors = typeColors[a.type] || typeColors.info;
+            
+            return (
+              <Paper
+                key={a.id}
+                sx={{
+                  p: 2,
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 2,
+                  borderRadius: 2,
+                  backgroundColor: colors.bg,
+                  border: `1.5px solid ${colors.border}`,
+                  borderLeft: `5px solid ${colors.border}`,
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  cursor: "pointer",
+                  position: "relative",
+                  overflow: "hidden",
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: "2px",
+                    background: `linear-gradient(90deg, ${colors.border} 0%, transparent 100%)`,
+                    opacity: 0,
+                    transition: "opacity 0.3s ease"
+                  },
+                  "&:hover": {
+                    backgroundColor: colors.bgHover,
+                    transform: "translateY(-4px) translateX(6px)",
+                    boxShadow: `0 10px 25px rgba(${colors.border === "#0066cc" ? "0,102,204" : colors.border === "#f59e0b" ? "245,158,11" : colors.border === "#ef4444" ? "239,68,68" : "16,185,129"}, 0.15)`,
+                    borderColor: colors.border,
+                    "&::before": {
+                      opacity: 1
+                    }
+                  }
+                }}
+                elevation={0}
+              >
+                <Box sx={{ pt: 0.25, display: "flex", alignItems: "center" }}>
+                  <Box sx={{ fontSize: 22, display: "flex", animation: "pulse 2s infinite" }}>
+                    {getAlertIcon(a.type)}
+                  </Box>
+                </Box>
 
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <Typography sx={{ fontSize: 13, color: isLight ? "#6b7280" : "#94a3b8" }}>
-                  {a.time}
-                </Typography>
-                <Typography sx={{ fontWeight: 500, color: isLight ? "#111827" : "#f1f5f9" }}>
-                  {a.msg}
-                </Typography>
-              </Box>
-            </Paper>
-          ))}
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Typography sx={{ fontSize: 11, fontWeight: 700, color: colors.border, textTransform: "uppercase", letterSpacing: "0.3px", mb: 0.5 }}>
+                    {a.time}
+                  </Typography>
+                  <Typography sx={{ fontWeight: 600, color: isLight ? "#111827" : "#f1f5f9", fontSize: 14 }}>
+                    {a.msg}
+                  </Typography>
+                </Box>
+              </Paper>
+            );
+          })}
         </Stack>
       ) : (
-        <Typography sx={{ mt: 2, color: isLight ? "#6b7280" : "#94a3b8" }}>
-          {T.noAlerts}
-        </Typography>
+        <Box sx={{ p: 2, textAlign: "center", borderRadius: 2, backgroundColor: isLight ? "#f0fdf4" : "#1e3a2d", border: "1.5px dashed #10b981" }}>
+          <Typography sx={{ color: isLight ? "#10b981" : "#86efac", fontWeight: 600, fontSize: 14 }}>
+            ✅ {T.noAlerts}
+          </Typography>
+        </Box>
       )}
     </Box>
   );

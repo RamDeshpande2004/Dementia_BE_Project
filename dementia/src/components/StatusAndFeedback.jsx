@@ -6,23 +6,37 @@ export default function StatusAndFeedback({
   feedbackCount,
   sendFeedback,
 }) {
+  const isUnsafe = status === "Anomaly";
+  
   return (
     <div className="panel feedback-section">
-
+      
       <section className="status">
-        {status === "Anomaly" ? T.unsafe : T.safe}
+        {isUnsafe ? (
+          <>
+            <span style={{fontSize: '24px', marginRight: '8px'}}>⚠️</span>
+            {T.unsafe}
+          </>
+        ) : (
+          <>
+            <span style={{fontSize: '24px', marginRight: '8px'}}>✅</span>
+            {T.safe}
+          </>
+        )}
       </section>
 
       <h3>{T.feedback}</h3>
 
       <div className="feedback-buttons">
         <button
+          className="feedback-btn calm"
           onClick={() => sendFeedback({ reacted: true })}
         >
           ✅ {T.reacted}
         </button>
 
         <button
+          className="feedback-btn reacted"
           onClick={() => sendFeedback({ reacted: false })}
         >
           ❌ {T.notReacted}
@@ -30,7 +44,7 @@ export default function StatusAndFeedback({
       </div>
 
       <p>
-        {T.feedbackNote} ({feedbackCount % 10}/10)
+        {T.feedbackNote} — <strong>{feedbackCount % 10}/10</strong>
       </p>
 
     </div>

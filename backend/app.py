@@ -10,7 +10,8 @@ from gtts import gTTS
 import tempfile
 import atexit
 import pymongo
-import requests  
+import requests
+from admin_routes import admin_bp  
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT_DIR = os.path.abspath(os.path.join(BASE_DIR, ".."))
@@ -19,6 +20,9 @@ SCALER_PATH = os.path.join(ROOT_DIR, "model", "isoforest_scaler.pkl")
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
+
+# Register admin blueprint
+app.register_blueprint(admin_bp)
 
 try:
     iso_model = joblib.load(MODEL_PATH)

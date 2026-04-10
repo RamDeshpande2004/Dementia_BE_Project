@@ -8,18 +8,20 @@ import PatientSummary from "./components/PatientSummary";
 import SensorCards from "./components/SensorCards";
 import Notifications from "./components/Notifications";
 import StatusAndFeedback from "./components/StatusAndFeedback";
+import AdminDashboard from "./components/AdminDashboard";
 import { sendFeedbackAPI } from "./services/api";
 import { TEXTS, ALERT_TEXTS } from "./constants/texts";
 import { selectPrimaryAlertKey } from "./utils/helpers";
 
 export default function App() {
   const [language, setLanguage] = useState("mr");
-  const [themeMode, setThemeMode] = useState("dark");
+  const [themeMode, setThemeMode] = useState("light");
   const [data, setData] = useState(null);
   const [status, setStatus] = useState("Normal");
   const [alerts, setAlerts] = useState([]);
   const [feedbackCount, setFeedbackCount] = useState(0);
   const [speakingMsg, setSpeakingMsg] = useState("");
+  const [viewMode, setViewMode] = useState("patient"); // "patient" or "admin"
 
   const lastAlertRef = useRef("");
   const lastStatusRef = useRef("");
@@ -45,9 +47,9 @@ export default function App() {
           mode: themeMode,
           ...(themeMode === "light"
             ? {
-                background: { default: "#F9FAFB", paper: "#FFFFFF" },
-                text: { primary: "#1E293B" },
-                primary: { main: "#2563EB" },
+                background: { default: "#f9fafb", paper: "#ffffff" },
+                text: { primary: "#111827", secondary: "#374151" },
+                primary: { main: "#0066cc" },
               }
             : {
                 background: { default: "#0F172A", paper: "#1E293B" },
@@ -182,39 +184,71 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
 
-      <div className="dashboard">
-        <Header
-          T={T}
-          language={language}
-          setLanguage={setLanguage}
-          themeMode={themeMode}
-          setThemeMode={setThemeMode}
-        />
-
-        <PatientSummary
-          T={T}
-          data={data}
-          comfort={comfort}
-          comfortColor={comfortColor}
-          themeMode={themeMode}
-        />
-
-        <section className="status">
-          {status === "Anomaly" ? T.unsafe : T.safe}
-        </section>
-
-        <SensorCards data={data} LBL={T.labels} themeMode={themeMode} />
-
-          <StatusAndFeedback
-            status={status}
-            T={T}
-            feedbackCount={feedbackCount}
-            sendFeedback={sendFeedback}
-          />
-        <Notifications alerts={alerts} T={T} themeMode={themeMode} />
-
-        {speakingMsg && <div className="voice-bubble">🔊 {speakingMsg}</div>}
+      {/* Admin Toggle Button */}
+      <div style={{
+        position: 'fixed',
+        top: 10,
+        right: 10,
+        zIndex: 9999,
+        display: 'flex',
+        gap: '10px'
+      }}>
+        <button
+          onClick={() => setViewMode(viewMode === 'patient' ? 'admin' : 'patient')}
+          style={{
+            background: viewMode === 'admin' ? '#3498db' : '#95a5a6',
+            color: 'white',
+            border: 'none',
+            padding: '10px 20px',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            fontSize: '14px',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+          }}
+        >
+          {viewMode === 'admin' ? '👤 Patient View' : '🏥 Admin Panel'}
+        </button>
       </div>
+
+      {viewMode === 'admin' ? (
+        <AdminDashboard />
+      ) : (
+        <div className="dashboard">
+          <Header
+            T={T}
+            language={language}
+            setLanguage={setLanguage}
+            themeMode={themeMode}
+            setThemeMode={setThemeMode}
+          />
+
+          <PatientSummary
+            T={T}
+            data={data}
+            comfort={comfort}
+            comfortColor={comfortColor}
+            themeMode={themeMode}
+          />
+
+          <section className="status">
+            {status === "Anomaly" ? T.unsafe : T.safe}
+          </section>
+
+          <SensorCards data={data} LBL={T.labels} themeMode={themeMode} />
+
+            <StatusAndFeedback
+              status={status}
+              T={T}
+              feedbackCount={feedbackCount}
+              sendFeedback={sendFeedback}
+            />
+          <Notifications alerts={alerts} T={T} themeMode={themeMode} />
+
+          {speakingMsg && <div className="voice-bubble">🔊 {speakingMsg}</div>}
+        </div>
+      )}
     </ThemeProvider>
   );
 }

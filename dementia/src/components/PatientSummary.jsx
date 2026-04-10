@@ -51,32 +51,6 @@ export default function PatientSummary({
               <strong>Patient:</strong> { "Mrs. Neha Kanaki"}
             </Typography>
           </Box>
-
-          <Typography>
-            <strong>Condition:</strong> {"Mild Dementia"}
-          </Typography>
-
-          <Box sx={{ mt: 1 }}>
-            <Typography sx={{ mb: 0.5 }}>
-              <strong>{comfort}:</strong>
-            </Typography>
-            <LinearProgress
-              variant="determinate"
-              value={comfort}
-              sx={{
-                height: 12,
-                borderRadius: 6,
-                backgroundColor: isLight ? "#e0e0e0" : "#334155",
-                "& .MuiLinearProgress-bar": {
-                  backgroundColor: comfortColor,
-                  transition: "width 0.5s ease",
-                },
-              }}
-            />
-            <Typography sx={{ mt: 0.5, fontWeight: 600, textAlign: "right" }}>
-              {comfort.toFixed(0)}%
-            </Typography>
-          </Box>
         </Box>
       </CardContent>
     </Card>
